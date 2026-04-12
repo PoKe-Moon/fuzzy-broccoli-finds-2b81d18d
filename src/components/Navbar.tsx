@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Search, User, ShoppingBag, Menu, X, Sparkles, Home, Lightbulb, Heart, ArrowLeft } from "lucide-react";
+import { User, ShoppingBag, Menu, X, Sparkles, Home, Heart, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -7,7 +7,6 @@ import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "Home", path: "/", icon: Home },
-  { label: "Suggest a Dupe", path: "/suggest", icon: Lightbulb },
   { label: "Favorites", path: "/favorites", icon: Heart },
 ];
 
@@ -56,11 +55,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link to="/search">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-          </Link>
           <Link to="/profile">
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
