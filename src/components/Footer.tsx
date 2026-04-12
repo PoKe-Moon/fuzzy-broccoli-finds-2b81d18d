@@ -34,7 +34,8 @@ export function Footer() {
           <h4 className="font-display text-sm font-semibold mb-3">Account</h4>
           <div className="space-y-2 text-sm text-muted-foreground">
             <Link to="/profile" className="block hover:text-primary">My Profile</Link>
-            <Link to="/admin" className="block hover:text-primary">Admin</Link>
+            <Link to="/favorites" className="block hover:text-primary">Favorites</Link>
+            <Link to="/orders" className="block hover:text-primary">Orders</Link>
           </div>
         </div>
       </div>

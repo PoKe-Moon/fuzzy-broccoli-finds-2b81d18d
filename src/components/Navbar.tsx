@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Search, User, ShoppingBag, Menu, X, Sparkles, Home, LayoutDashboard, Lightbulb, PlusCircle } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X, Sparkles, Home, Lightbulb, Heart } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -7,6 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 const navLinks = [
   { label: "Home", path: "/", icon: Home },
   { label: "Suggest a Dupe", path: "/suggest", icon: Lightbulb },
+  { label: "Favorites", path: "/favorites", icon: Heart },
 ];
 
 export function Navbar() {
