@@ -15,6 +15,8 @@ import Profile from "./pages/Profile";
 import Favorites from "./pages/Favorites";
 import Orders from "./pages/Orders";
 import Cart from "./pages/Cart";
+import Login from "./pages/Login";
+import AdminLogin from "./pages/admin/AdminLogin";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminSubmissions from "./pages/admin/AdminSubmissions";
@@ -32,6 +34,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Admin login - standalone page */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+
             {/* Admin routes with sidebar layout */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminOverview />} />
@@ -57,6 +62,7 @@ const App = () => (
                       <Route path="/favorites" element={<Favorites />} />
                       <Route path="/orders" element={<Orders />} />
                       <Route path="/cart" element={<Cart />} />
+                      <Route path="/login" element={<Login />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
