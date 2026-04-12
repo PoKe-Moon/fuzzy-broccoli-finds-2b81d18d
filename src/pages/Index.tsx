@@ -6,8 +6,8 @@ import { products } from "@/data/products";
 import { motion } from "framer-motion";
 
 const Index = () => {
-  const featured = products.slice(0, 4);
-  const topSavings = [...products].sort((a, b) => (b.savings ?? 0) - (a.savings ?? 0)).slice(0, 4);
+  const featured = products.slice(0, 8);
+  const topSavings = [...products].sort((a, b) => (b.savings ?? 0) - (a.savings ?? 0)).slice(0, 8);
 
   return (
     <div>
