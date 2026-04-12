@@ -16,6 +16,7 @@ interface CartContextType {
   itemCount: number;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
