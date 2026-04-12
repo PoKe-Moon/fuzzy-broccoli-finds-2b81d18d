@@ -1,8 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
-import { Search, User, ShoppingBag, Menu, X, Sparkles, Home, Lightbulb, Heart } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Search, User, ShoppingBag, Menu, X, Sparkles, Home, Lightbulb, Heart, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "Home", path: "/", icon: Home },
@@ -13,16 +14,26 @@ const navLinks = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { itemCount } = useCart();
+  const showBack = location.pathname !== "/";
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Sparkles className="h-6 w-6 text-primary" />
-          <span className="font-display text-xl font-bold text-foreground tracking-tight">
-            Fuzzy-Broccoli
-          </span>
-        </Link>
+        <div className="flex items-center gap-2">
+          {showBack && (
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="mr-1">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          )}
+          <Link to="/" className="flex items-center gap-2">
+            <Sparkles className="h-6 w-6 text-primary" />
+            <span className="font-display text-xl font-bold text-foreground tracking-tight">
+              Fuzzy-Broccoli
+            </span>
+          </Link>
+        </div>
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-4">
@@ -55,12 +66,16 @@ export function Navbar() {
               <User className="h-5 w-5" />
             </Button>
           </Link>
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
-              3
-            </span>
-          </Button>
+          <Link to="/cart">
+            <Button variant="ghost" size="icon" className="relative">
+              <ShoppingBag className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </Button>
+          </Link>
           <Button
             variant="ghost"
             size="icon"
