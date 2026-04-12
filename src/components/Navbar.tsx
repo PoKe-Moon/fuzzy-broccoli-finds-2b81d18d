@@ -6,10 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 const navLinks = [
   { label: "Home", path: "/", icon: Home },
-  { label: "Search", path: "/search", icon: Search },
   { label: "Suggest a Dupe", path: "/suggest", icon: Lightbulb },
-  { label: "Add Product", path: "/add-product", icon: PlusCircle },
-  { label: "Admin", path: "/admin", icon: LayoutDashboard },
 ];
 
 export function Navbar() {
