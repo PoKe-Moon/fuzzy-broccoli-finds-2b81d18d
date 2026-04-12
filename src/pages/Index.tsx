@@ -40,9 +40,9 @@ const Index = () => {
                 </Button>
               </Link>
               <Link to="/suggest">
-                <Button size="lg" variant="outline" className="gap-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                <Button size="lg" variant="secondary" className="gap-2 font-semibold">
+                  <Sparkles className="h-4 w-4" />
                   Suggest a Dupe
-                  <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
