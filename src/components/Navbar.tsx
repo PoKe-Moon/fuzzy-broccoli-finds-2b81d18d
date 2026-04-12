@@ -1,13 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
-import { Search, User, ShoppingBag, Menu, X, Sparkles } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X, Sparkles, Home, LayoutDashboard, Lightbulb, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const navLinks = [
-  { label: "Home", path: "/" },
-  { label: "Search", path: "/search" },
-  { label: "Suggest a Dupe", path: "/suggest" },
-  { label: "Admin", path: "/admin" },
+  { label: "Home", path: "/", icon: Home },
+  { label: "Search", path: "/search", icon: Search },
+  { label: "Suggest a Dupe", path: "/suggest", icon: Lightbulb },
+  { label: "Add Product", path: "/add-product", icon: PlusCircle },
+  { label: "Admin", path: "/admin", icon: LayoutDashboard },
 ];
 
 export function Navbar() {
@@ -25,19 +27,22 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4">
           {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                location.pathname === link.path
-                  ? "text-primary"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {link.label}
-            </Link>
+            <Tooltip key={link.path}>
+              <TooltipTrigger asChild>
+                <Link to={link.path}>
+                  <Button
+                    variant={location.pathname === link.path ? "default" : "ghost"}
+                    size="icon"
+                    className={location.pathname === link.path ? "gradient-primary text-primary-foreground border-0" : ""}
+                  >
+                    <link.icon className="h-5 w-5" />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>{link.label}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
 
@@ -77,12 +82,13 @@ export function Navbar() {
               key={link.path}
               to={link.path}
               onClick={() => setMobileOpen(false)}
-              className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 location.pathname === link.path
                   ? "bg-primary text-primary-foreground"
                   : "text-foreground hover:bg-muted"
               }`}
             >
+              <link.icon className="h-4 w-4" />
               {link.label}
             </Link>
           ))}
