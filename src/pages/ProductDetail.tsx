@@ -170,7 +170,15 @@ const ProductDetail = () => {
             <Button size="lg" variant="outline">
               <Heart className="h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" onClick={() => {
+              const url = window.location.href;
+              if (navigator.share) {
+                navigator.share({ title: product.name, text: `Check out ${product.name} by ${product.brand} — only $${product.price.toFixed(2)}!`, url });
+              } else {
+                navigator.clipboard.writeText(url);
+                toast({ title: "Link copied!", description: "Product link copied to clipboard." });
+              }
+            }}>
               <Share2 className="h-4 w-4" />
             </Button>
           </div>
