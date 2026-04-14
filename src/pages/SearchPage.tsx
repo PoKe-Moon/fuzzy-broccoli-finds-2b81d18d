@@ -1,15 +1,28 @@
 import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
 import { ProductCard } from "@/components/ProductCard";
 import { products, categories } from "@/data/products";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const allBrands = [...new Set(products.map((p) => p.brand))].sort();
+const maxPrice = Math.ceil(Math.max(...products.map((p) => p.price)));
 
 const SearchPage = () => {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortBy, setSortBy] = useState<"price" | "rating" | "savings">("savings");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice]);
+  const [selectedBrand, setSelectedBrand] = useState("all");
 
   const filtered = useMemo(() => {
     let result = products.filter((p) => {
@@ -20,7 +33,9 @@ const SearchPage = () => {
         p.originalProduct?.toLowerCase().includes(query.toLowerCase()) ||
         p.originalBrand?.toLowerCase().includes(query.toLowerCase());
       const matchesCategory = activeCategory === "All" || p.category === activeCategory;
-      return matchesQuery && matchesCategory;
+      const matchesPrice = p.price >= priceRange[0] && p.price <= priceRange[1];
+      const matchesBrand = selectedBrand === "all" || p.brand === selectedBrand;
+      return matchesQuery && matchesCategory && matchesPrice && matchesBrand;
     });
 
     result.sort((a, b) => {
@@ -30,7 +45,16 @@ const SearchPage = () => {
     });
 
     return result;
-  }, [query, activeCategory, sortBy]);
+  }, [query, activeCategory, sortBy, priceRange, selectedBrand]);
+
+  const hasActiveFilters = selectedBrand !== "all" || priceRange[0] > 0 || priceRange[1] < maxPrice;
+
+  const clearFilters = () => {
+    setSelectedBrand("all");
+    setPriceRange([0, maxPrice]);
+    setActiveCategory("All");
+    setQuery("");
+  };
 
   return (
     <div className="container py-8">
@@ -64,6 +88,40 @@ const SearchPage = () => {
         </div>
       </div>
 
+      {/* Filters row */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 rounded-lg border bg-card">
+        <div className="flex-1 space-y-2">
+          <label className="text-sm font-medium">Price Range: ${priceRange[0]} – ${priceRange[1]}</label>
+          <Slider
+            min={0}
+            max={maxPrice}
+            step={1}
+            value={priceRange}
+            onValueChange={(v) => setPriceRange(v as [number, number])}
+            className="w-full"
+          />
+        </div>
+        <div className="w-full sm:w-48 space-y-2">
+          <label className="text-sm font-medium">Brand</label>
+          <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+            <SelectTrigger>
+              <SelectValue placeholder="All Brands" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Brands</SelectItem>
+              {allBrands.map((b) => (
+                <SelectItem key={b} value={b}>{b}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {hasActiveFilters && (
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="self-end">
+            <X className="h-4 w-4 mr-1" /> Clear
+          </Button>
+        )}
+      </div>
+
       <div className="flex flex-wrap gap-2 mb-8">
         {categories.map((cat) => (
           <Badge
@@ -84,11 +142,14 @@ const SearchPage = () => {
           <p className="text-sm">Try adjusting your search or filters</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filtered.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
+        <>
+          <p className="text-sm text-muted-foreground mb-4">{filtered.length} products found</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filtered.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
