@@ -48,6 +48,9 @@ const App = () => (
               <Route path="users" element={<AdminUsers />} />
             </Route>
 
+            {/* Login - no navbar/footer */}
+            <Route path="/login" element={<Login />} />
+
             {/* Customer routes with navbar/footer */}
             <Route
               path="*"
@@ -64,7 +67,6 @@ const App = () => (
                       <Route path="/favorites" element={<Favorites />} />
                       <Route path="/orders" element={<Orders />} />
                       <Route path="/cart" element={<Cart />} />
-                      <Route path="/login" element={<Login />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
