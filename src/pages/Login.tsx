@@ -5,6 +5,55 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, MeshDistortMaterial, Sphere, Torus, MeshWobbleMaterial } from "@react-three/drei";
+import { useRef } from "react";
+import * as THREE from "three";
+
+const RotatingSphere = ({ position, color, speed, distort, size }: { position: [number, number, number]; color: string; speed: number; distort: number; size: number }) => {
+  const ref = useRef<THREE.Mesh>(null!);
+  useFrame((_, delta) => {
+    ref.current.rotation.x += delta * speed * 0.3;
+    ref.current.rotation.y += delta * speed * 0.5;
+  });
+  return (
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={1.5}>
+      <Sphere ref={ref} args={[size, 64, 64]} position={position}>
+        <MeshDistortMaterial color={color} distort={distort} speed={3} roughness={0.2} metalness={0.8} />
+      </Sphere>
+    </Float>
+  );
+};
+
+const FloatingTorus = ({ position, color }: { position: [number, number, number]; color: string }) => {
+  const ref = useRef<THREE.Mesh>(null!);
+  useFrame((_, delta) => {
+    ref.current.rotation.x += delta * 0.4;
+    ref.current.rotation.z += delta * 0.2;
+  });
+  return (
+    <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
+      <Torus ref={ref} args={[0.8, 0.3, 32, 64]} position={position}>
+        <MeshWobbleMaterial color={color} factor={0.4} speed={2} roughness={0.3} metalness={0.7} />
+      </Torus>
+    </Float>
+  );
+};
+
+const Scene = () => (
+  <>
+    <ambientLight intensity={0.3} />
+    <directionalLight position={[5, 5, 5]} intensity={1} color="#ffd1dc" />
+    <pointLight position={[-5, -5, 5]} intensity={0.8} color="#c4b5fd" />
+    <pointLight position={[5, -5, -5]} intensity={0.5} color="#93c5fd" />
+    <RotatingSphere position={[-3, 1.5, -2]} color="#f9a8d4" speed={0.8} distort={0.4} size={1.2} />
+    <RotatingSphere position={[3.5, -1, -3]} color="#c4b5fd" speed={0.6} distort={0.3} size={1.5} />
+    <RotatingSphere position={[0, 2.5, -4]} color="#93c5fd" speed={1} distort={0.5} size={0.8} />
+    <RotatingSphere position={[-2, -2, -2]} color="#fde68a" speed={0.5} distort={0.35} size={0.6} />
+    <FloatingTorus position={[2, 1, -1.5]} color="#f0abfc" />
+    <FloatingTorus position={[-1.5, -1.5, -3]} color="#a5b4fc" />
+  </>
+);
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -25,11 +74,20 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-background">
+      {/* 3D Background */}
+      <div className="absolute inset-0 z-0">
+        <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
+          <Scene />
+        </Canvas>
+      </div>
+      {/* Overlay for readability */}
+      <div className="absolute inset-0 z-[1] bg-background/60 backdrop-blur-[2px]" />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md space-y-8"
+        className="w-full max-w-md space-y-8 relative z-10 bg-card/80 backdrop-blur-xl p-8 rounded-2xl border shadow-2xl"
       >
         <div className="text-center space-y-2">
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
