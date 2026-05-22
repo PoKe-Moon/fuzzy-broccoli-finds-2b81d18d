@@ -16,6 +16,7 @@ import Favorites from "./pages/Favorites";
 import Orders from "./pages/Orders";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminProducts from "./pages/admin/AdminProducts";
@@ -50,6 +51,7 @@ const App = () => (
 
             {/* Login - no navbar/footer */}
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
             {/* Customer routes with navbar/footer */}
             <Route
